@@ -28,8 +28,7 @@ public class Member extends BasicEntity {
   private List<Address> addresses;
 
   @Builder
-  public Member(Long id, String name, String email, String password, List<Address> addresses) {
-    super(id);
+  public Member(String name, String email, String password, List<Address> addresses) {
     this.name = name;
     this.email = email;
     this.password = password;
