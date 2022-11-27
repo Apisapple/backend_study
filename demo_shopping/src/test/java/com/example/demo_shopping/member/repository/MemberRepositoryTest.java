@@ -38,4 +38,18 @@ class MemberRepositoryTest {
     Assertions.assertFalse(current.isAfter(savedMember.getCreateTime()));
 
   }
+
+  @Test
+  void findMemberByNameTest() {
+    Member member = Member.builder()
+        .name("TESTER")
+        .email("test@naver.com")
+        .build();
+
+    memberRepository.save(member);
+
+    Member savedMember = memberRepository.findMemberByEmail("test@naver.com").orElseThrow();
+
+    Assertions.assertNotNull(savedMember);
+  }
 }
