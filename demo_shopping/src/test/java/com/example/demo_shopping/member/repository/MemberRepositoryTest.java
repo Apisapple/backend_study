@@ -2,6 +2,7 @@ package com.example.demo_shopping.member.repository;
 
 import com.example.demo_shopping.member.entity.Member;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,18 +30,15 @@ class MemberRepositoryTest {
         .email("test@naver.com")
         .build();
 
-    memberRepository.save(member);
+    Member savedMember = memberRepository.save(member);
 
-    Member savedMember = memberRepository.findById(1L).orElseThrow();
-    LOG.info("Saved member id : {}", savedMember.getId());
     Assertions.assertEquals(member.getId(), savedMember.getId());
     Assertions.assertEquals(member.getEmail(), savedMember.getEmail());
     Assertions.assertFalse(current.isAfter(savedMember.getCreateTime()));
-
   }
 
   @Test
-  void findMemberByNameTest() {
+  void findMemberByEmailTest() {
     Member member = Member.builder()
         .name("TESTER")
         .email("test@naver.com")
@@ -49,7 +47,32 @@ class MemberRepositoryTest {
     memberRepository.save(member);
 
     Member savedMember = memberRepository.findMemberByEmail("test@naver.com").orElseThrow();
-
     Assertions.assertNotNull(savedMember);
+  }
+
+  @Test
+  void findMembersByNameTest() {
+    Member member = Member.builder()
+        .name("TESTER")
+        .email("test@naver.com")
+        .build();
+
+    Member member2 = Member.builder()
+        .name("TESTER")
+        .email("test2@naver.com")
+        .build();
+
+    Member member3 = Member.builder()
+        .name("TEST")
+        .email("test3@naver.com")
+        .build();
+
+    memberRepository.save(member);
+    memberRepository.save(member2);
+    memberRepository.save(member3);
+
+    List<Member> memberList = memberRepository.findMembersByName("TESTER");
+
+    Assertions.assertEquals(2, memberList.size());
   }
 }
