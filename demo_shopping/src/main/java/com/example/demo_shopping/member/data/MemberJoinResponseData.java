@@ -1,6 +1,15 @@
 package com.example.demo_shopping.member.data;
 
-public class MemberJoinResponse {
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Builder
+public class MemberJoinResponseData {
+
   private Long id;
   private String name;
   private String email;
