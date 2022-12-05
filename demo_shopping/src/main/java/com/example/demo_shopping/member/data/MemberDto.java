@@ -25,7 +25,7 @@ public class MemberDto {
     List<Address> addressList = new ArrayList<>();
 
     for (AddressDto address : this.addresses) {
-      addressList.add(address.toEntity(this));
+      addressList.add(Address.builder().addressData(address.getAddress()).build());
     }
 
     return Member.builder()

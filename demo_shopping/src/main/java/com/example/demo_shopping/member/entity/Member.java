@@ -1,7 +1,10 @@
 package com.example.demo_shopping.member.entity;
 
 
+import com.example.demo_shopping.member.data.AddressDto;
+import com.example.demo_shopping.member.data.MemberDto;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -32,5 +35,19 @@ public class Member extends BasicEntity {
     this.email = email;
     this.password = password;
     this.addresses = addresses;
+  }
+
+  public Member updateMember(MemberDto memberDto) {
+    this.name = memberDto.getName();
+    this.password = memberDto.getPassword();
+    this.addresses = memberDto.getAddresses().stream()
+        .map(addressDto -> addressDto.toEntity(this))
+        .collect(Collectors.toList());
+    return this;
+  }
+
+  public void addAddress(Address address) {
+    this.addresses.add(address);
+    address.setMember(this);
   }
 }

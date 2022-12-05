@@ -1,6 +1,7 @@
 package com.example.demo_shopping.member.data;
 
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,4 +15,5 @@ public class MemberJoinResponseData {
   private String name;
   private String email;
   private String password;
+  private List<AddressDto> addresses;
 }
