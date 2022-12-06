@@ -1,5 +1,6 @@
 package com.example.demo_shopping.member.service;
 
+import com.example.demo_shopping.member.data.AddressDto;
 import com.example.demo_shopping.member.data.MemberDto;
 import com.example.demo_shopping.member.data.MemberJoinResponseData;
 import com.example.demo_shopping.member.entity.Address;
@@ -8,6 +9,8 @@ import com.example.demo_shopping.member.exception.AddressErrorException;
 import com.example.demo_shopping.member.exception.ErrorCode;
 import com.example.demo_shopping.member.exception.MemberErrorException;
 import com.example.demo_shopping.member.repository.MemberRepository;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -67,6 +70,16 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
+  public MemberJoinResponseData addAddress(List<AddressDto> addressDtoList) {
+    return null;
+  }
+
+  @Override
+  public MemberJoinResponseData removeAddress(List<AddressDto> addressDtoList) {
+    return null;
+  }
+
+  @Override
   public void removeMember(MemberDto memberDto) throws MemberErrorException {
 
     Member savedMember = memberRepository.findMemberByEmail(memberDto.getEmail())
@@ -82,10 +95,17 @@ public class MemberServiceImpl implements MemberService {
             ErrorCode.CANNOT_FOUND_MEMBER.getCode())
     );
 
+    List<AddressDto> addressDtoList = new ArrayList<>();
+
+    for(Address address : savedMember.getAddresses()) {
+      addressDtoList.add(address.toDto());
+    }
+
     return MemberJoinResponseData.builder()
         .name(savedMember.getName())
         .email(savedMember.getEmail())
         .password(savedMember.getPassword())
+        .addresses(addressDtoList)
         .build();
   }
 }

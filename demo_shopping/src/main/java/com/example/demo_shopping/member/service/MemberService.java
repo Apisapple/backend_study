@@ -1,9 +1,11 @@
 package com.example.demo_shopping.member.service;
 
+import com.example.demo_shopping.member.data.AddressDto;
 import com.example.demo_shopping.member.data.MemberDto;
 import com.example.demo_shopping.member.data.MemberJoinResponseData;
 import com.example.demo_shopping.member.exception.AddressErrorException;
 import com.example.demo_shopping.member.exception.MemberErrorException;
+import java.util.List;
 
 public interface MemberService {
 
@@ -11,6 +13,11 @@ public interface MemberService {
       throws AddressErrorException, MemberErrorException;
 
   MemberJoinResponseData updateMember(MemberDto memberDto) throws MemberErrorException;
+
+  MemberJoinResponseData addAddress(List<AddressDto> addressDtoList);
+
+  MemberJoinResponseData removeAddress(List<AddressDto> addressDtoList);
+
 
   void removeMember(MemberDto memberDto) throws MemberErrorException;
 
