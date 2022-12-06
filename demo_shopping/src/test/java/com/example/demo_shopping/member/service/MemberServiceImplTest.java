@@ -1,6 +1,5 @@
 package com.example.demo_shopping.member.service;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -14,17 +13,20 @@ import com.example.demo_shopping.member.repository.MemberRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceImplTest {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(MemberServiceImplTest.class);
   @InjectMocks
   MemberServiceImpl memberService;
   @Mock
@@ -49,13 +51,32 @@ class MemberServiceImplTest {
         joinRequestData.getEmail());
 
     //then
-    assertEquals(responseData.getEmail(), joinRequestData.getEmail());
-    assertEquals(responseData.getPassword(), joinRequestData.getPassword());
-    assertEquals(responseData.getAddresses(), joinRequestData.getAddresses());
+    Assertions.assertThat(responseData.getAddresses()).usingRecursiveComparison()
+        .isEqualTo(joinRequestData.getAddresses());
+    Assertions.assertThat(responseData.getPassword())
+        .isEqualTo(joinRequestData.getPassword());
+    Assertions.assertThat(responseData.getName())
+        .isEqualTo(joinRequestData.getName());
   }
 
   @Test
-  void updateMember() {
+  void updateMember() throws MemberErrorException {
+    MemberDto savedMemberDto = getJoinRequestData();
+    Member savedMember = savedMemberDto.toEntity();
+    Long id = 1L;
+    savedMember.setId(id);
+
+    given(memberRepository.findMemberByEmail(savedMemberDto.getEmail()))
+        .willReturn(Optional.of(savedMember));
+
+    savedMemberDto.setName("SON");
+    savedMemberDto.setPassword("password221207");
+
+    MemberJoinResponseData result = memberService.updateMember(savedMemberDto);
+
+    Assertions.assertThat(result.getEmail()).isEqualTo(savedMember.getEmail());
+    Assertions.assertThat(result.getPassword()).isEqualTo(savedMember.getPassword());
+    Assertions.assertThat(result.getName()).isEqualTo(savedMember.getName());
   }
 
   @Test
@@ -64,11 +85,11 @@ class MemberServiceImplTest {
 
   private MemberDto getJoinRequestData() {
     List<AddressDto> addressDtoList = new ArrayList<>();
-    addressDtoList.add(AddressDto.builder().address("남양주시").build());
+    addressDtoList.add(AddressDto.builder().address("NewYork").build());
     return MemberDto.builder()
-        .name("박상아")
-        .email("psa8210@naver.com")
-        .password("password5245")
+        .name("HONG")
+        .email("HONG_12345@naver.com")
+        .password("password9876")
         .addresses(addressDtoList)
         .build();
   }
