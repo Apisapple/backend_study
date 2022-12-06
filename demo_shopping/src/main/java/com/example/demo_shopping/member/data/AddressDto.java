@@ -25,4 +25,10 @@ public class AddressDto {
         .build();
   }
 
+  @Override
+  public String toString() {
+    return "AddressDto{" +
+        "address='" + address + '\'' +
+        '}';
+  }
 }
