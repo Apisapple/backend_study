@@ -70,13 +70,49 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  public MemberJoinResponseData addAddress(List<AddressDto> addressDtoList) {
-    return null;
+  public MemberJoinResponseData addAddress(Long id, AddressDto addressDto) throws MemberErrorException {
+    Member member = memberRepository.findMemberById(id).orElseThrow(
+        () -> new MemberErrorException(ErrorCode.CANNOT_FOUND_MEMBER.getMsg(),
+            ErrorCode.CANNOT_FOUND_MEMBER.getCode())
+    );
+    member.addAddress(Address.builder()
+        .addressData(addressDto.getAddress())
+        .build());
+
+
+    return MemberJoinResponseData.builder()
+        .id(member.getId())
+        .email(member.getEmail())
+        .name(member.getName())
+        .password(member.getPassword())
+        .addresses(member.getAddresses().stream()
+            .map(Address::toDto)
+            .collect(Collectors.toList())
+        )
+        .build();
   }
 
   @Override
-  public MemberJoinResponseData removeAddress(List<AddressDto> addressDtoList) {
-    return null;
+  public MemberJoinResponseData removeAddress(Long id, AddressDto addressDto) throws MemberErrorException {
+    Member member = memberRepository.findMemberById(id).orElseThrow(
+        () -> new MemberErrorException(ErrorCode.CANNOT_FOUND_MEMBER.getMsg(),
+            ErrorCode.CANNOT_FOUND_MEMBER.getCode())
+    );
+    member.removeAddress(Address.builder()
+        .addressData(addressDto.getAddress())
+        .build());
+
+
+    return MemberJoinResponseData.builder()
+        .id(member.getId())
+        .email(member.getEmail())
+        .name(member.getName())
+        .password(member.getPassword())
+        .addresses(member.getAddresses().stream()
+            .map(Address::toDto)
+            .collect(Collectors.toList())
+        )
+        .build();
   }
 
   @Override
@@ -97,7 +133,7 @@ public class MemberServiceImpl implements MemberService {
 
     List<AddressDto> addressDtoList = new ArrayList<>();
 
-    for(Address address : savedMember.getAddresses()) {
+    for (Address address : savedMember.getAddresses()) {
       addressDtoList.add(address.toDto());
     }
 

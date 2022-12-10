@@ -50,4 +50,9 @@ public class Member extends BasicEntity {
     this.addresses.add(address);
     address.setMember(this);
   }
+
+  public void removeAddress(Address address) {
+    this.addresses.remove(address);
+    address.setMember(null);
+  }
 }

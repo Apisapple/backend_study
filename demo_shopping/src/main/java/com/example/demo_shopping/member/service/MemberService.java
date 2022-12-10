@@ -14,9 +14,9 @@ public interface MemberService {
 
   MemberJoinResponseData updateMember(MemberDto memberDto) throws MemberErrorException;
 
-  MemberJoinResponseData addAddress(List<AddressDto> addressDtoList);
+  MemberJoinResponseData addAddress(Long id, AddressDto addressDto) throws MemberErrorException;
 
-  MemberJoinResponseData removeAddress(List<AddressDto> addressDtoList);
+  MemberJoinResponseData removeAddress(Long id, AddressDto addressDto) throws MemberErrorException;
 
 
   void removeMember(MemberDto memberDto) throws MemberErrorException;
