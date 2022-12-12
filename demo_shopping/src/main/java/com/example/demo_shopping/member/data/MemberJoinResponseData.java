@@ -16,4 +16,5 @@ public class MemberJoinResponseData {
   private String email;
   private String password;
   private List<AddressDto> addresses;
+  private String msg;
 }
