@@ -4,19 +4,19 @@ import com.example.demo_shopping.member.entity.Address;
 import com.example.demo_shopping.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter
-@Builder
+@NoArgsConstructor
 public class AddressDto {
   String address;
 
-//  public Address toEntity(MemberDto memberDto) {
-//    return Address.builder()
-//        .member(memberDto.toEntity())
-//        .addressData(this.address)
-//        .build();
-//  }
+  @Builder
+  public AddressDto(String address) {
+    this.address = address;
+  }
+
 
   public Address toEntity(Member member) {
     return Address.builder()
