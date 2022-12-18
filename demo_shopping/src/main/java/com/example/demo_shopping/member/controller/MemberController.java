@@ -8,6 +8,7 @@ import com.example.demo_shopping.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,19 @@ public class MemberController {
     try {
       return ResponseEntity.ok(memberService.joinMember(memberDto));
     } catch (AddressErrorException | MemberErrorException e) {
+      return ResponseEntity.badRequest().body(
+          MemberJoinResponseData.builder()
+              .msg(e.getMessage())
+              .build()
+      );
+    }
+  }
+
+  @PutMapping("/member/update")
+  public ResponseEntity<MemberJoinResponseData> updateMember(@RequestBody MemberDto memberDto) {
+    try {
+      return ResponseEntity.ok(memberService.updateMember(memberDto));
+    } catch (MemberErrorException e) {
       return ResponseEntity.badRequest().body(
           MemberJoinResponseData.builder()
               .msg(e.getMessage())
