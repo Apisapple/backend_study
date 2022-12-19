@@ -8,11 +8,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.demo_shopping.member.data.AddressDto;
 import com.example.demo_shopping.member.data.MemberDto;
+import com.example.demo_shopping.member.data.MemberJoinResponseData;
 import com.example.demo_shopping.member.service.MemberService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 @WebMvcTest(MemberController.class)
 class MemberControllerTest {
@@ -53,9 +57,23 @@ class MemberControllerTest {
     ObjectMapper mapper = new ObjectMapper();
     String memberDtoJsonData = mapper.writeValueAsString(memberDto);
 
-    mvc.perform(put("/member/update")
+    mvc.perform(post("/member/join")
         .contentType(MediaType.APPLICATION_JSON)
-        .content(memberDtoJsonData)).andExpect(status().isOk());
+        .content(memberDtoJsonData))
+        .andExpect(status().isOk());
+
+    memberDto.setEmail("CHANGE_12345@kakao.co.kr");
+    String updateMemberDtoJsonData = mapper.writeValueAsString(memberDto);
+
+    MvcResult mvcResult = mvc.perform(put("/member/update")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(memberDtoJsonData))
+        .andExpect(status().isOk())
+        .andReturn();
+
+//    String responseBodyString = mvcResult.getResponse().getContentAsString();
+//
+//    Assertions.assertEquals(responseBodyString, getResponseData(memberDto).toString());
   }
 
   private MemberDto getJoinRequestData() {
@@ -66,5 +84,14 @@ class MemberControllerTest {
         .email("HONG_12345@naver.com")
         .password("password9876")
         .addresses(addressDtoList).build();
+  }
+
+  private MemberJoinResponseData getResponseData(MemberDto memberDto) {
+    return MemberJoinResponseData.builder()
+        .name(memberDto.getName())
+        .email(memberDto.getEmail())
+        .password(memberDto.getPassword())
+        .addresses(memberDto.getAddresses())
+        .build();
   }
 }
