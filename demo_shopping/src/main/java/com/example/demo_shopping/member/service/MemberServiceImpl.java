@@ -79,7 +79,6 @@ public class MemberServiceImpl implements MemberService {
         .addressData(addressDto.getAddress())
         .build());
 
-
     return MemberJoinResponseData.builder()
         .id(member.getId())
         .email(member.getEmail())
@@ -102,7 +101,6 @@ public class MemberServiceImpl implements MemberService {
         .addressData(addressDto.getAddress())
         .build());
 
-
     return MemberJoinResponseData.builder()
         .id(member.getId())
         .email(member.getEmail())
@@ -116,12 +114,16 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  public void removeMember(MemberDto memberDto) throws MemberErrorException {
+  public MemberJoinResponseData removeMember(MemberDto memberDto) throws MemberErrorException {
 
     Member savedMember = memberRepository.findMemberByEmail(memberDto.getEmail())
         .orElseThrow(() -> new MemberErrorException(ErrorCode.CANNOT_FOUND_MEMBER.getMsg(),
             ErrorCode.CANNOT_FOUND_MEMBER.getCode()));
     memberRepository.delete(savedMember);
+
+    return MemberJoinResponseData.builder()
+        .msg("Member deletion successful.")
+        .build();
   }
 
   @Override
@@ -131,6 +133,20 @@ public class MemberServiceImpl implements MemberService {
             ErrorCode.CANNOT_FOUND_MEMBER.getCode())
     );
 
+    return makeResponseData(savedMember);
+  }
+
+  @Override
+  public MemberJoinResponseData findMemberById(Long id) throws MemberErrorException {
+    Member savedMember = memberRepository.findMemberById(id).orElseThrow(
+        () -> new MemberErrorException(ErrorCode.CANNOT_FOUND_MEMBER.getMsg(),
+            ErrorCode.CANNOT_FOUND_MEMBER.getCode())
+    );
+
+    return makeResponseData(savedMember);
+  }
+
+  private MemberJoinResponseData makeResponseData(Member savedMember) {
     List<AddressDto> addressDtoList = new ArrayList<>();
 
     for (Address address : savedMember.getAddresses()) {
