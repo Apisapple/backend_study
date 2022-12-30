@@ -28,12 +28,23 @@ public abstract class Item {
   private String name;
   private String brand;
   private String itemNumber;
-  private String stockQuantity;
-
   private Integer price;
+  private Long stockQuantity;
   private Long likePoint;
   private LocalDateTime lastModifiedTime;
   private LocalDateTime registrationTime;
+
+  public void addStockQuantity(Long stock) {
+    this.stockQuantity += stock;
+  }
+
+  public void subStockQuantity(Long stock) {
+    if (this.stockQuantity - stock < 0) {
+      this.stockQuantity = 0L;
+    } else {
+      stockQuantity -= stock;
+    }
+  }
 
   @PrePersist
   public void prePersist() {
