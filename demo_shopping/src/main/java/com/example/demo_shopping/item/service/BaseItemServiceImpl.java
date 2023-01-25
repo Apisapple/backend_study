@@ -1,15 +1,19 @@
 package com.example.demo_shopping.item.service;
 
 import com.example.demo_shopping.item.data.ItemResponseData;
+import com.example.demo_shopping.item.entity.Item;
 import com.example.demo_shopping.item.exception.ErrorCode;
 import com.example.demo_shopping.item.exception.ItemErrorException;
 import com.example.demo_shopping.item.repository.ItemRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BaseItemServiceImpl implements ItemService {
 
   private final ItemRepository itemRepository;
@@ -35,6 +39,9 @@ public class BaseItemServiceImpl implements ItemService {
 
   @Override
   public List<ItemResponseData> findItemByName(String name) {
-    return null;
+    List<Item> itemList = itemRepository.findItemsByNameContains(name);
+    return itemList.stream()
+        .map(Item::convertItemResponseData)
+        .collect(Collectors.toList());
   }
 }
