@@ -1,6 +1,7 @@
 package com.example.demo_shopping.item.entity;
 
 
+import com.example.demo_shopping.item.data.ItemResponseData;
 import java.time.LocalDateTime;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.GeneratedValue;
@@ -55,5 +56,17 @@ public abstract class Item {
   @PreUpdate
   public void preUpdate() {
     lastModifiedTime = LocalDateTime.now();
+  }
+
+  public ItemResponseData convertItemResponseData() {
+    return ItemResponseData.builder()
+        .itemNumber(this.itemNumber)
+        .name(this.name)
+        .brand(this.brand)
+        .price(this.price)
+        .likePoint(this.likePoint)
+        .lastModified(this.lastModifiedTime)
+        .stockQuantity(this.stockQuantity)
+        .build();
   }
 }
