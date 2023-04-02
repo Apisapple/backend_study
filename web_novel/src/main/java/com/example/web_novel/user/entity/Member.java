@@ -25,6 +25,7 @@ public class Member {
   @Builder
   public Member(String name) {
     this.name = name;
+    this.point = 0;
   }
 
   public void addPoint(Integer point) {
