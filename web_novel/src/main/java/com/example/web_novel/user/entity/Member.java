@@ -26,4 +26,12 @@ public class Member {
   public Member(String name) {
     this.name = name;
   }
+
+  public void addPoint(Integer point) {
+    this.point += point;
+  }
+
+  public void minusPoint(Integer point) {
+    this.point = Math.max(this.point - point, 0);
+  }
 }
