@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -18,4 +19,9 @@ public class Member {
   private Long id;
   private String name;
   private Integer point;
+
+  @Builder
+  public Member(String name) {
+    this.name = name;
+  }
 }
