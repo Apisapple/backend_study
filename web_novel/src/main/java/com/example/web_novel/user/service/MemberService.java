@@ -4,8 +4,10 @@ import com.example.web_novel.user.entity.Member;
 import com.example.web_novel.user.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
 
@@ -17,6 +19,7 @@ public class MemberService {
    * @param member member information
    * @return saved member
    */
+  @Transactional
   public Member saveMember(Member member) {
     return memberRepository.save(member);
   }
@@ -29,6 +32,7 @@ public class MemberService {
    * @param point mount of point
    * @return member information
    */
+  @Transactional
   public Member buyPoint(String name, Integer point) {
     Member savecMember = memberRepository.findByName(name).orElseThrow(
         () -> new IllegalArgumentException("CANNOT FOUNT MEMBER")
@@ -46,6 +50,7 @@ public class MemberService {
    * @param point mount of point
    * @return member information
    */
+  @Transactional
   public Member usePoint(String name, Integer point) {
     Member savecMember = memberRepository.findByName(name).orElseThrow(
         () -> new IllegalArgumentException("CANNOT FOUNT MEMBER")
